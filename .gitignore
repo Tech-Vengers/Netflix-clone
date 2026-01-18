@@ -1,0 +1,13 @@
+node_modules/
+.env
+dist/
+build/
+.terraform/
+*.tfstate*
+.terraform.lock.hcl
+.vscode/
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
