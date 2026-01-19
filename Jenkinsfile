@@ -44,9 +44,16 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'
+       stage('Install Dependencies') {
+    tools {
+        nodejs 'nodejs-16'
+    }
+    steps {
+        sh '''
+          node -v
+          npm -v
+          npm install
+        '''
             }
         }
 
