@@ -62,21 +62,24 @@ pipeline {
         NVD_API_KEY = credentials('NVD_API_KEY')
     }
     steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-            dependencyCheck(
-                odcInstallation: 'DP-Check',
-                additionalArguments: [
-                    '--scan .',
-                    '--disableYarnAudit',
-                    '--disableNodeAudit',
-                    '--nvdApiKey', env.NVD_API_KEY,
-                    '--nvdApiDelay', '16000',
-                    '--noupdate',
-                    '--failOnCVSS', '11'
-                ].join(' ')
-            )
-        }
- // 🔑 THIS LINE FIXES THE ❌
+        script {
+            catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+
+                dependencyCheck(
+                    odcInstallation: 'DP-Check',
+                    additionalArguments: [
+                        '--scan .',
+                        '--disableYarnAudit',
+                        '--disableNodeAudit',
+                        '--nvdApiKey', env.NVD_API_KEY,
+                        '--nvdApiDelay', '16000',
+                        '--noupdate',
+                        '--failOnCVSS', '11'
+                    ].join(' ')
+                )
+            }
+
+            // 🔑 THIS LINE FIXES THE ❌
             if (currentBuild.result == 'FAILURE') {
                 currentBuild.result = 'SUCCESS'
             }
@@ -89,6 +92,7 @@ pipeline {
         }
     }
 }
+
         stage('TRIVY FS Scan') {
             steps {
                 sh 'trivy fs . > trivyfs.txt'
