@@ -87,14 +87,18 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
-            steps {
-                script {
-                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                        
-                        sh 'docker build --build-arg TMDB_API_KEY=$TMDB_API_KEY -t netflix .'
-                        sh 'docker tag netflix techvengers7788/netflix:latest'
-                        sh 'docker push techvengers7788/netflix:latest'
+       stage('Docker Build & Push') {
+    steps {
+        script {
+            withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+
+                sh '''
+                  docker build \
+                    --build-arg VITE_APP_TMDB_V3_API_KEY=$TMDB_API_KEY \
+                    -t techvengers7788/netflix:latest .
+                  
+                  docker push techvengers7788/netflix:latest
+                '''
                     }
                 }
             }
@@ -107,14 +111,14 @@ pipeline {
         }
 
         stage('Deploy to Container') {
-            steps {
-                sh '''
-                  docker rm -f netflix || true
-                  docker run -d --name netflix \
-                    -p 8081:80 \
-                    -e VITE_APP_TMDB_V3_API_KEY=$TMDB_API_KEY \
-                    techvengers7788/netflix:latest
-                '''
+           stage('Deploy to Container') {
+    steps {
+        sh '''
+          docker rm -f netflix || true
+          docker run -d --name netflix \
+            -p 8081:80 \
+            techvengers7788/netflix:latest
+        '''
             }
         }
     }
