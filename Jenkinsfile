@@ -91,9 +91,10 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        
                         sh 'docker build --build-arg TMDB_API_KEY=$TMDB_API_KEY -t netflix .'
-                        sh 'docker tag netflix Techvengers7788/netflix:latest'
-                        sh 'docker push Techvengers7788/netflix:latest'
+                        sh 'docker tag netflix techvengers7788/netflix:latest'
+                        sh 'docker push techvengers7788/netflix:latest'
                     }
                 }
             }
@@ -101,7 +102,7 @@ pipeline {
 
         stage('TRIVY Image Scan') {
             steps {
-                sh 'trivy image Techvengers7788/netflix:latest > trivyimage.txt'
+                sh 'trivy image techvengers7788/netflix:latest > trivyimage.txt'
             }
         }
 
@@ -112,7 +113,7 @@ pipeline {
                   docker run -d --name netflix \
                     -p 8081:80 \
                     -e TMDB_API_KEY=$TMDB_API_KEY \
-                    Techvengers7788/netflix:latest
+                    techvengers7788/netflix:latest
                 '''
             }
         }
