@@ -109,18 +109,15 @@ pipeline {
                 sh 'trivy image techvengers7788/netflix:latest > trivyimage.txt'
             }
         }
-
-        stage('Deploy to Container') {
-           stage('Deploy to Container') {
-    steps {
-        sh '''
-          docker rm -f netflix || true
-          docker run -d --name netflix \
-            -p 8081:80 \
-            techvengers7788/netflix:latest
-        '''
+ stage('Deploy to Container') {
+            steps {
+                sh '''
+                  docker rm -f netflix || true
+                  docker run -d --name netflix \
+                    -p 8081:80 \
+                    techvengers7788/netflix:latest
+                '''
             }
         }
     }
-}
 }
