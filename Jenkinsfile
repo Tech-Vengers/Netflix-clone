@@ -59,7 +59,7 @@ pipeline {
 
       stage('OWASP FS Scan') {
     environment {
-        NVD_API_KEY = credentials('nvd-api-key')
+        NVD_API_KEY = credentials('NVD_API_KEY')
     }
     steps {
         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
