@@ -83,7 +83,8 @@ script {
                 echo 'OWASP report not generated – skipping publisher'
             }
         }
-
+    }
+}
         stage('TRIVY FS Scan') {
             steps {
                 sh 'trivy fs . > trivyfs.txt'
