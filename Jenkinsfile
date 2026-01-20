@@ -112,7 +112,7 @@ pipeline {
                   docker rm -f netflix || true
                   docker run -d --name netflix \
                     -p 8081:80 \
-                    -e TMDB_API_KEY=$TMDB_API_KEY \
+                    -e REACT_APP_TMDB_API_KEY=$TMDB_API_KEY \
                     techvengers7788/netflix:latest
                 '''
             }
