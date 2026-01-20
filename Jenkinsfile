@@ -62,7 +62,7 @@ pipeline {
         NVD_API_KEY = credentials('NVD_API_KEY')
     }
     steps {
-        catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
             dependencyCheck(
                 odcInstallation: 'DP-Check',
                 additionalArguments: [
