@@ -139,6 +139,7 @@ pipeline {
                     echo 'Overriding FAILURE to SUCCESS due to OWASP FS Scan'
                     currentBuild.result = 'SUCCESS'
                 }
-    }
-}
+            }
+         }
+      }
 }
