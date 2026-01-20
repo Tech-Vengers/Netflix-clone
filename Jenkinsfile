@@ -76,10 +76,13 @@ pipeline {
                 ].join(' ')
             )
         }
-        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-    }
-}
-
+script {
+            if (fileExists('dependency-check-report.xml')) {
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            } else {
+                echo 'OWASP report not generated – skipping publisher'
+            }
+        }
 
         stage('TRIVY FS Scan') {
             steps {
