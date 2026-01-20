@@ -58,8 +58,12 @@ pipeline {
         }
 
         stage('OWASP FS Scan') {
+
+             environment {
+        NVD_API_KEY = credentials('NVD_API_KEY')
+    }
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit',
+                dependencyCheck additionalArguments: '--scan ./ --nvdApiKey ${NVD_API_KEY} --disableYarnAudit --disableNodeAudit',
                                 odcInstallation: 'DP-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
