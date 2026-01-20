@@ -57,26 +57,29 @@ pipeline {
             }
         }
 
-       stage('OWASP FS Scan') {
+      stage('OWASP FS Scan') {
+    environment {
+        NVD_API_KEY = credentials('nvd-api-key')
+    }
     steps {
-        withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_API_KEY')]) {
-            catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
-                dependencyCheck(
-                    additionalArguments: """
-                      --scan .
-                      --nvdApiKey ${NVD_API_KEY}
-                      --nvdApiDelay 16000
-                      --disableYarnAudit
-                      --disableNodeAudit
-                      --failOnCVSS 11
-                    """,
-                    odcInstallation: 'DP-Check'
-                )
-            }
+        catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+            dependencyCheck(
+                odcInstallation: 'DP-Check',
+                additionalArguments: [
+                    '--scan .',
+                    '--disableYarnAudit',
+                    '--disableNodeAudit',
+                    '--nvdApiKey', env.NVD_API_KEY,
+                    '--nvdApiDelay', '16000',
+                    '--noupdate',
+                    '--failOnCVSS', '11'
+                ].join(' ')
+            )
         }
         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
     }
 }
+
 
         stage('TRIVY FS Scan') {
             steps {
